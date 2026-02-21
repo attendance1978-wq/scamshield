@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Scanner - ScamShield</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+</head>
+<body class="dashboard-body">
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <span class="logo-icon">🛡️</span>
+                <span class="logo-text">ScamShield</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html">
+                    <span class="nav-icon">📊</span> Dashboard
+                </a>
+                <a href="email-scanner.html" class="active">
+                    <span class="nav-icon">📧</span> Email Scanner
+                </a>
+                <a href="url-checker.html">
+                    <span class="nav-icon">🔗</span> URL Checker
+                </a>
+                <a href="history.html">
+                    <span class="nav-icon">📈</span> History
+                </a>
+                <a href="settings.html">
+                    <span class="nav-icon">⚙️</span> Settings
+                </a>
+                <a href="#" id="logout-btn">
+                    <span class="nav-icon">🚪</span> Logout
+                </a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="content-header">
+                <h1>📧 Email Scanner</h1>
+                <div class="user-info">
+                    <span class="user-name" id="user-name">User</span>
+                    <button class="btn-icon">👤</button>
+                </div>
+            </header>
+
+            <section class="scanner-section">
+                <div class="scanner-form">
+                    <div class="form-group">
+                        <label for="email-subject">Email Subject</label>
+                        <input type="text" id="email-subject" placeholder="Enter email subject..." />
+                    </div>
+                    <div class="form-group">
+                        <label for="email-sender">Sender (From)</label>
+                        <input type="text" id="email-sender" placeholder="sender@example.com" />
+                    </div>
+                    <div class="form-group">
+                        <label for="email-body">Email Content</label>
+                        <textarea id="email-body" placeholder="Paste the email content here..." rows="10"></textarea>
+                    </div>
+                    <button id="scan-email-btn" class="btn btn-primary">Scan Email</button>
+                </div>
+
+                <div id="scan-result" class="scan-result hidden">
+                    <div class="result-header">
+                        <span class="result-icon"></span>
+                        <span class="result-title"></span>
+                    </div>
+                    <div class="result-details">
+                        <div class="result-score">
+                            <span>Risk Score:</span>
+                            <span id="risk-score">0%</span>
+                        </div>
+                        <div class="result-category">
+                            <span>Category:</span>
+                            <span id="threat-category">-</span>
+                        </div>
+                        <div class="result-confidence">
+                            <span>Confidence:</span>
+                            <span id="confidence-level">0%</span>
+                        </div>
+                    </div>
+                    <div id="result-recommendations" class="result-recommendations"></div>
+                </div>
+            </section>
+
+            <section class="info-section">
+                <h2>How Email Scanning Works</h2>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-icon">🤖</div>
+                        <h3>AI-Powered Analysis</h3>
+                        <p>Our machine learning models analyze email content for phishing indicators and scam patterns.</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">🔍</div>
+                        <h3>Header Analysis</h3>
+                        <p>We examine email headers to detect spoofing and identify the true source of the email.</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">🔗</div>
+                        <h3>Link Inspection</h3>
+                        <p>All links in the email are analyzed for malicious URLs and phishing domains.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        // Check authentication
+        if (!auth.requireAuth()) {
+            // Will redirect to login
+        }
+
+        // Load user info
+        const user = auth.getUser();
+        if (user && user.username) {
+            document.getElementById('user-name').textContent = user.username;
+        }
+
+        // Setup scan button
+        document.getElementById('scan-email-btn').addEventListener('click', async function() {
+            const subject = document.getElementById('email-subject').value;
+            const sender = document.getElementById('email-sender').value;
+            const body = document.getElementById('email-body').value;
+            
+            if (!body.trim()) {
+                alert('Please enter email content to scan');
+                return;
+            }
+            
+            const content = `Subject: ${subject}\nFrom: ${sender}\n\n${body}`;
+            
+            this.disabled = true;
+            this.textContent = 'Scanning...';
+            
+            try {
+                const response = await fetch('/api/scan', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...auth.getAuthHeaders()
+                    },
+                    body: JSON.stringify({
+                        content: content,
+                        type: 'email'
+                    })
+                });
+                
+                const result = await response.json();
+                
+                const resultDiv = document.getElementById('scan-result');
+                resultDiv.classList.remove('hidden', 'safe', 'warning', 'danger');
+                
+                if (result.is_scam) {
+                    resultDiv.classList.add('danger');
+                    document.querySelector('.result-icon').textContent = '⚠️';
+                    document.querySelector('.result-title').textContent = 'Potential Scam Detected!';
+                } else {
+                    resultDiv.classList.add('safe');
+                    document.querySelector('.result-icon').textContent = '✅';
+                    document.querySelector('.result-title').textContent = 'No Threat Detected';
+                }
+                
+                document.getElementById('risk-score').textContent = Math.round(result.risk_score * 100) + '%';
+                document.getElementById('threat-category').textContent = result.category || 'Unknown';
+                document.getElementById('confidence-level').textContent = Math.round(result.confidence * 100) + '%';
+                
+                resultDiv.classList.remove('hidden');
+                
+            } catch (error) {
+                console.error('Scan error:', error);
+                alert('Error performing scan. Please try again.');
+            } finally {
+                this.disabled = false;
+                this.textContent = 'Scan Email';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - ScamShield</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+</head>
+<body class="dashboard-body">
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <span class="logo-icon">🛡️</span>
+                <span class="logo-text">ScamShield</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html">
+                    <span class="nav-icon">📊</span> Dashboard
+                </a>
+                <a href="email-scanner.html">
+                    <span class="nav-icon">📧</span> Email Scanner
+                </a>
+                <a href="url-checker.html">
+                    <span class="nav-icon">🔗</span> URL Checker
+                </a>
+                <a href="history.html">
+                    <span class="nav-icon">📈</span> History
+                </a>
+                <a href="settings.html" class="active">
+                    <span class="nav-icon">⚙️</span> Settings
+                </a>
+                <a href="#" id="logout-btn">
+                    <span class="nav-icon">🚪</span> Logout
+                </a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="content-header">
+                <h1>⚙️ Settings</h1>
+                <div class="user-info">
+                    <span class="user-name" id="user-name">User</span>
+                    <button class="btn-icon">👤</button>
+                </div>
+            </header>
+
+            <section class="settings-section">
+                <div class="settings-group">
+                    <h2>Profile Settings</h2>
+                    <div class="settings-form">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" id="username" placeholder="Username" />
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" placeholder="email@example.com" />
+                        </div>
+                        <div class="form-group">
+                            <label for="current-password">Current Password</label>
+                            <input type="password" id="current-password" placeholder="Enter current password" />
+                        </div>
+                        <div class="form-group">
+                            <label for="new-password">New Password</label>
+                            <input type="password" id="new-password" placeholder="Enter new password" />
+                        </div>
+                        <div class="form-group">
+                            <label for="confirm-password">Confirm New Password</label>
+                            <input type="password" id="confirm-password" placeholder="Confirm new password" />
+                        </div>
+                        <button id="save-profile" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </div>
+
+                <div class="settings-group">
+                    <h2>Notification Settings</h2>
+                    <div class="settings-form">
+                        <div class="form-group checkbox-group">
+                            <label>
+                                <input type="checkbox" id="email-alerts" checked />
+                                Receive email alerts for detected threats
+                            </label>
+                        </div>
+                        <div class="form-group checkbox-group">
+                            <label>
+                                <input type="checkbox" id="browser-notifications" />
+                                Enable browser notifications
+                            </label>
+                        </div>
+                        <div class="form-group checkbox-group">
+                            <label>
+                                <input type="checkbox" id="weekly-report" checked />
+                                Receive weekly security report
+                            </label>
+                        </div>
+                        <button id="save-notifications" class="btn btn-primary">Save Preferences</button>
+                    </div>
+                </div>
+
+                <div class="settings-group">
+                    <h2>Scan Preferences</h2>
+                    <div class="settings-form">
+                        <div class="form-group">
+                            <label for="default-scan-type">Default Scan Type</label>
+                            <select id="default-scan-type">
+                                <option value="email">Email</option>
+                                <option value="url">URL</option>
+                                <option value="domain">Domain</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="confidence-threshold">Confidence Threshold</label>
+                            <input type="range" id="confidence-threshold" min="0" max="100" value="70" />
+                            <span id="threshold-value">70%</span>
+                        </div>
+                        <div class="form-group checkbox-group">
+                            <label>
+                                <input type="checkbox" id="auto-scan-links" checked />
+                                Automatically scan links in emails
+                            </label>
+                        </div>
+                        <button id="save-preferences" class="btn btn-primary">Save Preferences</button>
+                    </div>
+                </div>
+
+                <div class="settings-group">
+                    <h2>API Keys</h2>
+                    <div class="settings-form">
+                        <p class="settings-info">Add external API keys for enhanced threat detection:</p>
+                        <div class="form-group">
+                            <label for="virustotal-key">VirusTotal API Key</label>
+                            <input type="password" id="virustotal-key" placeholder="Enter VirusTotal API key" />
+                        </div>
+                        <div class="form-group">
+                            <label for="abuseipdb-key">AbuseIPDB API Key</label>
+                            <input type="password" id="abuseipdb-key" placeholder="Enter AbuseIPDB API key" />
+                        </div>
+                        <button id="save-apikeys" class="btn btn-primary">Save API Keys</button>
+                    </div>
+                </div>
+
+                <div class="settings-group danger-zone">
+                    <h2>Danger Zone</h2>
+                    <div class="settings-form">
+                        <div class="danger-action">
+                            <div>
+                                <strong>Delete Account</strong>
+                                <p>Permanently delete your account and all associated data. This action cannot be undone.</p>
+                            </div>
+                            <button id="delete-account" class="btn btn-danger">Delete Account</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        // Check authentication
+        if (!auth.requireAuth()) {
+            // Will redirect to login
+        }
+
+        // Load user info
+        const user = auth.getUser();
+        if (user) {
+            document.getElementById('username').value = user.username || '';
+            document.getElementById('email').value = user.email || '';
+            document.getElementById('user-name').textContent = user.username || 'User';
+        }
+
+        // Threshold slider
+        const thresholdSlider = document.getElementById('confidence-threshold');
+        const thresholdValue = document.getElementById('threshold-value');
+        thresholdSlider.addEventListener('input', function() {
+            thresholdValue.textContent = this.value + '%';
+        });
+
+        // Save profile
+        document.getElementById('save-profile').addEventListener('click', async function() {
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const currentPassword = document.getElementById('current-password').value;
+            const newPassword = document.getElementById('new-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+
+            if (newPassword && newPassword !== confirmPassword) {
+                alert('Passwords do not match');
+                return;
+            }
+
+            // In a real app, this would call an API
+            alert('Profile settings saved (demo)');
+        });
+
+        // Save notifications
+        document.getElementById('save-notifications').addEventListener('click', function() {
+            alert('Notification settings saved (demo)');
+        });
+
+        // Save preferences
+        document.getElementById('save-preferences').addEventListener('click', function() {
+            alert('Scan preferences saved (demo)');
+        });
+
+        // Save API keys
+        document.getElementById('save-apikeys').addEventListener('click', function() {
+            alert('API keys saved (demo)');
+        });
+
+        // Delete account
+        document.getElementById('delete-account').addEventListener('click', function() {
+            if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+                // In a real app, this would call an API to delete the account
+                auth.logout();
+            }
+        });
+    </script>
+</body>
+</html>

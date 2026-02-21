@@ -1,0 +1,105 @@
+version: '3.8'
+
+services:
+  # Main Flask application
+  app:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: scamshield-app
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=production
+      - DATABASE_URL=sqlite:///database/scamshield.db
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+    volumes:
+      - ../database:/app/database
+      - ../logs:/app/logs
+      - ../models:/app/models
+    depends_on:
+      - redis
+    restart: unless-stopped
+    networks:
+      - scamshield-network
+
+  # Redis cache and message broker
+  redis:
+    image: redis:7-alpine
+    container_name: scamshield-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+    networks:
+      - scamshield-network
+
+  # Celery worker for background tasks
+  celery-worker:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: scamshield-celery
+    command: celery -A backend.main.celery worker --loglevel=info
+    environment:
+      - DATABASE_URL=sqlite:///database/scamshield.db
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+    volumes:
+      - ../database:/app/database
+      - ../logs:/app/logs
+    depends_on:
+      - redis
+      - app
+    restart: unless-stopped
+    networks:
+      - scamshield-network
+
+  # Celery beat for scheduled tasks
+  celery-beat:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: scamshield-celery-beat
+    command: celery -A backend.main.celery beat --loglevel=info
+    environment:
+      - DATABASE_URL=sqlite:///database/scamshield.db
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+    volumes:
+      - ../database:/app/database
+      - ../logs:/app/logs
+    depends_on:
+      - redis
+      - app
+    restart: unless-stopped
+    networks:
+      - scamshield-network
+
+  # Nginx reverse proxy (optional)
+  nginx:
+    image: nginx:alpine
+    container_name: scamshield-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ../frontend:/usr/share/nginx/html:ro
+    depends_on:
+      - app
+    restart: unless-stopped
+    networks:
+      - scamshield-network
+
+networks:
+  scamshield-network:
+    driver: bridge
+
+volumes:
+  redis-data:

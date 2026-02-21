@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ScamShield - Email Scam Detection</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <span class="logo-icon">🛡️</span>
+                <h1>ScamShield</h1>
+            </div>
+            <nav class="nav">
+                <a href="index.html" class="active">Home</a>
+                <a href="dashboard.html">Dashboard</a>
+                <a href="login.html">Login</a>
+                <a href="register.html" class="btn btn-primary">Sign Up</a>
+            </nav>
+        </header>
+
+        <main>
+            <section class="hero">
+                <div class="hero-content">
+                    <h2>Protect Yourself from Email Scams</h2>
+                    <p>ScamShield uses advanced AI and machine learning to detect phishing attempts, fraudulent emails, and malicious links before they can harm you.</p>
+                    <div class="hero-actions">
+                        <a href="register.html" class="btn btn-primary btn-large">Get Started Free</a>
+                        <a href="#features" class="btn btn-secondary btn-large">Learn More</a>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="shield-animation">
+                        <div class="shield">
+                            <span class="checkmark">✓</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="features" class="features">
+                <h3>Why Choose ScamShield?</h3>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🤖</div>
+                        <h4>AI-Powered Detection</h4>
+                        <p>Advanced machine learning models analyze emails for suspicious patterns and phishing indicators.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔍</div>
+                        <h4>Real-Time Scanning</h4>
+                        <p>Instant analysis of emails with detailed risk scores and threat categorization.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔗</div>
+                        <h4>URL Analysis</h4>
+                        <p>Deep inspection of links to identify malicious websites and phishing domains.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📊</div>
+                        <h4>Threat Intelligence</h4>
+                        <p>Continuous updates from global threat databases to stay ahead of new scams.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="scanner-preview">
+                <h3>Try Our Email Scanner</h3>
+                <p>Paste any suspicious email content below for instant analysis</p>
+                <div class="scanner-form">
+                    <textarea id="scan-input" placeholder="Paste email subject and body here..."></textarea>
+                    <button id="quick-scan" class="btn btn-primary">Scan Email</button>
+                </div>
+                <div id="scan-result" class="scan-result hidden">
+                    <div class="result-header">
+                        <span class="result-icon"></span>
+                        <span class="result-title"></span>
+                    </div>
+                    <div class="result-details">
+                        <div class="result-score">
+                            <span>Risk Score:</span>
+                            <span id="risk-score">0%</span>
+                        </div>
+                        <div class="result-category">
+                            <span>Category:</span>
+                            <span id="threat-category">-</span>
+                        </div>
+                        <div class="result-confidence">
+                            <span>Confidence:</span>
+                            <span id="confidence-level">0%</span>
+                        </div>
+                    </div>
+                    <div id="result-recommendations" class="result-recommendations"></div>
+                </div>
+            </section>
+
+            <section class="stats">
+                <div class="stat-item">
+                    <span class="stat-number">1M+</span>
+                    <span class="stat-label">Emails Scanned</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">99.9%</span>
+                    <span class="stat-label">Detection Rate</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">50K+</span>
+                    <span class="stat-label">Protected Users</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">24/7</span>
+                    <span class="stat-label">Active Monitoring</span>
+                </div>
+            </section>
+
+            <section class="testimonials">
+                <h3>What Our Users Say</h3>
+                <div class="testimonial-grid">
+                    <div class="testimonial-card">
+                        <p>"ScamShield saved me from a phishing attack that looked exactly like my bank's email. Incredible detection!"</p>
+                        <span class="testimonial-author">- Sarah M., Business Owner</span>
+                    </div>
+                    <div class="testimonial-card">
+                        <p>"The real-time alerts are amazing. I feel much safer checking my inbox now."</p>
+                        <span class="testimonial-author">- John D., Freelancer</span>
+                    </div>
+                    <div class="testimonial-card">
+                        <p>"Finally, a tool that actually works. The URL analysis caught several malicious links."</p>
+                        <span class="testimonial-author">- Mike R., IT Professional</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h5>ScamShield</h5>
+                    <p>Protecting users from email scams since 2024</p>
+                </div>
+                <div class="footer-section">
+                    <h5>Quick Links</h5>
+                    <a href="index.html">Home</a>
+                    <a href="dashboard.html">Dashboard</a>
+                    <a href="login.html">Login</a>
+                    <a href="register.html">Sign Up</a>
+                </div>
+                <div class="footer-section">
+                    <h5>Resources</h5>
+                    <a href="#">Documentation</a>
+                    <a href="#">API</a>
+                    <a href="#">Blog</a>
+                </div>
+                <div class="footer-section">
+                    <h5>Legal</h5>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 ScamShield. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        document.getElementById('quick-scan').addEventListener('click', async function() {
+            const input = document.getElementById('scan-input').value;
+            const resultDiv = document.getElementById('scan-result');
+            
+            if (!input.trim()) {
+                alert('Please enter some email content to scan');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/scan', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        content: input,
+                        type: 'email'
+                    })
+                });
+                
+                const result = await response.json();
+                
+                resultDiv.classList.remove('hidden');
+                resultDiv.classList.remove('safe', 'warning', 'danger');
+                
+                if (result.is_scam) {
+                    resultDiv.classList.add('danger');
+                    document.querySelector('.result-icon').textContent = '⚠️';
+                    document.querySelector('.result-title').textContent = 'Potential Scam Detected!';
+                } else {
+                    resultDiv.classList.add('safe');
+                    document.querySelector('.result-icon').textContent = '✅';
+                    document.querySelector('.result-title').textContent = 'No Threat Detected';
+                }
+                
+                document.getElementById('risk-score').textContent = Math.round(result.risk_score * 100) + '%';
+                document.getElementById('threat-category').textContent = result.category || 'Unknown';
+                document.getElementById('confidence-level').textContent = Math.round(result.confidence * 100) + '%';
+                
+            } catch (error) {
+                console.error('Scan error:', error);
+                alert('Error performing scan. Please try again.');
+            }
+        });
+    </script>
+</body>
+</html>

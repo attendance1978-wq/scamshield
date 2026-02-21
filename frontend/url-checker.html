@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Checker - ScamShield</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+</head>
+<body class="dashboard-body">
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <span class="logo-icon">🛡️</span>
+                <span class="logo-text">ScamShield</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html">
+                    <span class="nav-icon">📊</span> Dashboard
+                </a>
+                <a href="email-scanner.html">
+                    <span class="nav-icon">📧</span> Email Scanner
+                </a>
+                <a href="url-checker.html" class="active">
+                    <span class="nav-icon">🔗</span> URL Checker
+                </a>
+                <a href="history.html">
+                    <span class="nav-icon">📈</span> History
+                </a>
+                <a href="settings.html">
+                    <span class="nav-icon">⚙️</span> Settings
+                </a>
+                <a href="#" id="logout-btn">
+                    <span class="nav-icon">🚪</span> Logout
+                </a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="content-header">
+                <h1>🔗 URL Checker</h1>
+                <div class="user-info">
+                    <span class="user-name" id="user-name">User</span>
+                    <button class="btn-icon">👤</button>
+                </div>
+            </header>
+
+            <section class="scanner-section">
+                <div class="scanner-form">
+                    <div class="form-group">
+                        <label for="url-input">Enter URL to Check</label>
+                        <input type="text" id="url-input" placeholder="https://example.com or just example.com" />
+                    </div>
+                    <button id="check-url-btn" class="btn btn-primary">Check URL</button>
+                </div>
+
+                <div id="scan-result" class="scan-result hidden">
+                    <div class="result-header">
+                        <span class="result-icon"></span>
+                        <span class="result-title"></span>
+                    </div>
+                    <div class="result-details">
+                        <div class="result-score">
+                            <span>Risk Score:</span>
+                            <span id="risk-score">0%</span>
+                        </div>
+                        <div class="result-category">
+                            <span>Category:</span>
+                            <span id="threat-category">-</span>
+                        </div>
+                        <div class="result-confidence">
+                            <span>Confidence:</span>
+                            <span id="confidence-level">0%</span>
+                        </div>
+                    </div>
+                    <div id="result-recommendations" class="result-recommendations"></div>
+                </div>
+            </section>
+
+            <section class="info-section">
+                <h2>URL Analysis Features</h2>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-icon">🌐</div>
+                        <h3>Domain Reputation</h3>
+                        <p>We check the domain's reputation using multiple threat intelligence sources.</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">🔀</div>
+                        <h3>URL Pattern Analysis</h3>
+                        <p>Our system analyzes URL patterns to detect phishing and malicious characteristics.</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">📡</div>
+                        <h3>WHOIS Lookup</h3>
+                        <p>We retrieve domain registration information to identify newly created suspicious domains.</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">🛡️</div>
+                        <h3>Safe Browsing</h3>
+                        <p>Check against Google Safe Browsing and other safe browsing databases.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="tips-section">
+                <h2>🚨 How to Spot Malicious URLs</h2>
+                <ul class="tips-list">
+                    <li><strong>Check the domain:</strong> Look for misspellings or extra characters (e.g., paypa1.com instead of paypal.com)</li>
+                    <li><strong>Hover before clicking:</strong> Preview the actual URL before clicking on any link</li>
+                    <li><strong>Look for HTTPS:</strong> Secure sites use HTTPS, but phishing sites can also use it</li>
+                    <li><strong>Be wary of urgent requests:</strong> Phishing URLs often create urgency (e.g., "Account Suspended")</li>
+                    <li><strong>Unexpected domains:</strong> Be suspicious of URLs that don't match the supposed sender</li>
+                </ul>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        // Check authentication
+        if (!auth.requireAuth()) {
+            // Will redirect to login
+        }
+
+        // Load user info
+        const user = auth.getUser();
+        if (user && user.username) {
+            document.getElementById('user-name').textContent = user.username;
+        }
+
+        // Setup check button
+        document.getElementById('check-url-btn').addEventListener('click', async function() {
+            const url = document.getElementById('url-input').value;
+            
+            if (!url.trim()) {
+                alert('Please enter a URL to check');
+                return;
+            }
+            
+            this.disabled = true;
+            this.textContent = 'Checking...';
+            
+            try {
+                const response = await fetch('/api/scan', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...auth.getAuthHeaders()
+                    },
+                    body: JSON.stringify({
+                        content: url,
+                        type: 'url'
+                    })
+                });
+                
+                const result = await response.json();
+                
+                const resultDiv = document.getElementById('scan-result');
+                resultDiv.classList.remove('hidden', 'safe', 'warning', 'danger');
+                
+                if (result.is_scam) {
+                    resultDiv.classList.add('danger');
+                    document.querySelector('.result-icon').textContent = '⚠️';
+                    document.querySelector('.result-title').textContent = 'Malicious URL Detected!';
+                } else {
+                    resultDiv.classList.add('safe');
+                    document.querySelector('.result-icon').textContent = '✅';
+                    document.querySelector('.result-title').textContent = 'URL Appears Safe';
+                }
+                
+                document.getElementById('risk-score').textContent = Math.round(result.risk_score * 100) + '%';
+                document.getElementById('threat-category').textContent = result.category || 'Unknown';
+                document.getElementById('confidence-level').textContent = Math.round(result.confidence * 100) + '%';
+                
+                resultDiv.classList.remove('hidden');
+                
+            } catch (error) {
+                console.error('Check error:', error);
+                alert('Error checking URL. Please try again.');
+            } finally {
+                this.disabled = false;
+                this.textContent = 'Check URL';
+            }
+        });
+    </script>
+</body>
+</html>

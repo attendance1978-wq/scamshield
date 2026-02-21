@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - ScamShield</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+</head>
+<body class="dashboard-body">
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <span class="logo-icon">🛡️</span>
+                <span class="logo-text">ScamShield</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="active">
+                    <span class="nav-icon">📊</span> Dashboard
+                </a>
+                <a href="email-scanner.html">
+                    <span class="nav-icon">📧</span> Email Scanner
+                </a>
+                <a href="url-checker.html">
+                    <span class="nav-icon">🔗</span> URL Checker
+                </a>
+                <a href="history.html">
+                    <span class="nav-icon">📈</span> History
+                </a>
+                <a href="settings.html">
+                    <span class="nav-icon">⚙️</span> Settings
+                </a>
+                <a href="#" id="logout-btn">
+                    <span class="nav-icon">🚪</span> Logout
+                </a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="content-header">
+                <h1>Dashboard</h1>
+                <div class="user-info">
+                    <span class="user-name" id="user-name">User</span>
+                    <button class="btn-icon">👤</button>
+                </div>
+            </header>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon total">📧</div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="total-scans">0</span>
+                        <span class="stat-label">Total Scans</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon threats">⚠️</div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="threats-detected">0</span>
+                        <span class="stat-label">Threats Detected</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon safe">✅</div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="safe-emails">0</span>
+                        <span class="stat-label">Safe Emails</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon rate">🎯</div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="detection-rate">0%</span>
+                        <span class="stat-label">Detection Rate</span>
+                    </div>
+                </div>
+            </div>
+
+            <section class="scanner-section">
+                <h2>Scan Email or URL</h2>
+                <div class="scanner-tabs">
+                    <button class="tab-btn active" data-tab="email">Email</button>
+                    <button class="tab-btn" data-tab="url">URL</button>
+                    <button class="tab-btn" data-tab="domain">Domain</button>
+                </div>
+                <div class="scanner-content">
+                    <div class="tab-content active" id="email-tab">
+                        <textarea id="email-input" placeholder="Paste email content here..."></textarea>
+                    </div>
+                    <div class="tab-content" id="url-tab">
+                        <input type="text" id="url-input" placeholder="Enter URL to scan..." />
+                    </div>
+                    <div class="tab-content" id="domain-tab">
+                        <input type="text" id="domain-input" placeholder="Enter domain to check..." />
+                    </div>
+                </div>
+                <button id="scan-btn" class="btn btn-primary">Scan Now</button>
+            </section>
+
+            <section class="results-section">
+                <h2>Recent Scans</h2>
+                <div class="results-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Type</th>
+                                <th>Content</th>
+                                <th>Risk Level</th>
+                                <th>Category</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="results-body">
+                            <tr>
+                                <td colspan="6" class="no-data">No scans yet. Start scanning!</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="alerts-section">
+                <h2>Recent Alerts</h2>
+                <div id="alerts-list" class="alerts-list">
+                    <div class="no-data">No alerts</div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/realtime.js"></script>
+</body>
+</html>
